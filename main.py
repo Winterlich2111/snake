@@ -47,12 +47,14 @@ snake_coordinates = [snake_spawn_point, snake_spawn_point]
 change_color(snake_coordinates, snake_head_color)
 current_direction = "right"
 spawn_new_tail = True
-tail_list = [snake_coordinates]
-def main_loop(spawn_new_tail):
+tail_list = [snake_coordinates.copy()]
+def main_loop():
+    global spawn_new_tail, snake_coordinates, tail_list, current_direction
     print("anfang schleife")
     root.after(300, main_loop)
-    tail_list.append(snake_coordinates)
+    tail_list.append(snake_coordinates.copy())
     if not spawn_new_tail:
+        change_color(tail_list[0], button_color)
         tail_list.pop[0] 
         
     if current_direction == "right":
@@ -85,4 +87,4 @@ def main_loop(spawn_new_tail):
 
     root.mainloop()
 
-main_loop(spawn_new_tail)
+main_loop()
