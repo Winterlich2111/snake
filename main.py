@@ -11,8 +11,8 @@ button_gap_size = 5
 button_start_at = 10
 button_color = "#cce"
 background_color = "lightblue"
-snake_head_color = "#605"
-snake_tail_color = "#a37"
+snake_head_color = "#f00"
+snake_tail_color = "#000"
 screen_size = button_amount_per_row*(button_pixel_size+button_gap_size) + 2 * button_start_at - button_gap_size
 
 def change_color(coordinates, color):
