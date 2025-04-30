@@ -50,8 +50,8 @@ spawn_new_tail = True
 tail_list = []
 def main_loop():
     global spawn_new_tail, snake_coordinates, tail_list, current_direction
+    death = False
     print("anfang schleife")
-    root.after(300, main_loop)
     if not spawn_new_tail:
         change_color(tail_list[0], button_color)
         tail_list.pop(0) 
@@ -72,19 +72,22 @@ def main_loop():
     snake_coordinates[0] = snake_coordinates[0] % button_amount_per_row 
     snake_coordinates[1] = snake_coordinates[1] % button_amount_per_row 
 
-    
+    if snake_coordinates in tail_list:
+        death = True
 
-    change_color(snake_coordinates, snake_head_color)
-    for tail in tail_list:
-        change_color(tail, snake_tail_color)
+    if not death: 
+        change_color(snake_coordinates, snake_head_color)
+        for tail in tail_list:
+            change_color(tail, snake_tail_color)
 
     print(snake_coordinates)
     print(tail_list)
 
     print("ende schleife")
     
-    spawn_new_tail = False 
-
+    #spawn_new_tail = False 
+    if not death:
+        root.after(300, main_loop)
     root.mainloop()
 
 main_loop()
