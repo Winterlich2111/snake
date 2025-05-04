@@ -1,9 +1,14 @@
 import tkinter as tk
 import time
 
+def key_handler(key):
+    global current_key
+    current_key = key.keysym
+
 
 root = tk.Tk()
 root.title("SNAKE")
+root.bind("<KeyPress>", key_handler)
 
 button_amount_per_row = 15
 button_pixel_size = 40
@@ -14,11 +19,10 @@ background_color = "lightblue"
 snake_head_color = "#f00"
 snake_tail_color = "#000"
 screen_size = button_amount_per_row*(button_pixel_size+button_gap_size) + 2 * button_start_at - button_gap_size
+current_key = "Right"
 
 def change_color(coordinates, color):
     buttons[coordinates[0]][coordinates[1]].config(bg=color)
-
-
 
 
 
@@ -39,35 +43,44 @@ for line in range(button_amount_per_row):
 
 time.sleep(1.5)
 
-print("hi 1.5")
+#print("hi 1.5")
 
 #Snake initialisieren
 snake_spawn_point = int(round(button_amount_per_row/2-0.5))
 snake_coordinates = [snake_spawn_point, snake_spawn_point]
 change_color(snake_coordinates, snake_head_color)
-current_direction = "right"
+current_direction = "Right"
 spawn_new_tail = True
 tail_list = []
 def main_loop():
     global spawn_new_tail, snake_coordinates, tail_list, current_direction
     death = False
-    print("anfang schleife")
+    #print("anfang schleife")
+
+    #überprüfen dass er nicht 180° Drehung macht (oben nach unten, links nach rechts, etc.)
+    directions = [current_direction, current_key]
+    left_right = "Left" in directions and "Right" in directions
+    up_down = "Up" in directions and "Down" in directions
+    if not left_right and not up_down:
+        current_direction = current_key #Richtung auf den aktuellen Key-Press ändern
+
+
     if not spawn_new_tail:
         change_color(tail_list[0], button_color)
         tail_list.pop(0) 
     tail_list.append(snake_coordinates.copy())
         
-    if current_direction == "right":
+    if current_direction == "Right":
         snake_coordinates[0] += 1
     
-    elif current_direction == "left":
+    elif current_direction == "Left":
         snake_coordinates[0] -= 1
 
-    elif current_direction == "up":
-        snake_coordinates[1] += 1
-    
-    elif current_direction == "down":
+    elif current_direction == "Up":
         snake_coordinates[1] -= 1
+    
+    elif current_direction == "Down":
+        snake_coordinates[1] += 1
 
     snake_coordinates[0] = snake_coordinates[0] % button_amount_per_row 
     snake_coordinates[1] = snake_coordinates[1] % button_amount_per_row 
@@ -79,15 +92,13 @@ def main_loop():
         change_color(snake_coordinates, snake_head_color)
         for tail in tail_list:
             change_color(tail, snake_tail_color)
+    else:
+        print("DEATH")
 
-    print(snake_coordinates)
-    print(tail_list)
-
-    print("ende schleife")
     
-    #spawn_new_tail = False 
+    spawn_new_tail = False 
     if not death:
-        root.after(300, main_loop)
+        root.after(220, main_loop)
     root.mainloop()
 
 main_loop()
