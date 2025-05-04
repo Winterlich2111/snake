@@ -1,5 +1,6 @@
 import tkinter as tk
 import time
+import random
 
 def key_handler(key):
     global current_key
@@ -10,6 +11,7 @@ root = tk.Tk()
 root.title("SNAKE")
 root.bind("<KeyPress>", key_handler)
 
+#Configurable Things
 button_amount_per_row = 15
 button_pixel_size = 40
 button_gap_size = 5
@@ -18,8 +20,13 @@ button_color = "#cce"
 background_color = "lightblue"
 snake_head_color = "#f00"
 snake_tail_color = "#000"
+apple_color = "#afa"
+
+
+#Not Configurable Things
 screen_size = button_amount_per_row*(button_pixel_size+button_gap_size) + 2 * button_start_at - button_gap_size
 current_key = "Right"
+score = 0
 
 def change_color(coordinates, color):
     buttons[coordinates[0]][coordinates[1]].config(bg=color)
@@ -27,7 +34,7 @@ def change_color(coordinates, color):
 
 
 
-root.geometry(str(screen_size) + "x" + str(screen_size))
+root.geometry(str(screen_size) + "x" + str(screen_size)+"+50+50")
 root.config(bg=background_color)
 
 #Eine 2 dimensionale Liste für die Buttons machen
@@ -52,8 +59,15 @@ change_color(snake_coordinates, snake_head_color)
 current_direction = "Right"
 spawn_new_tail = True
 tail_list = []
+
+while True:
+    apple = [random.randint(0, button_amount_per_row-1), random.randint(0, button_amount_per_row-1)]
+    if not apple in tail_list:
+        break
+change_color(apple, apple_color)
+
 def main_loop():
-    global spawn_new_tail, snake_coordinates, tail_list, current_direction
+    global spawn_new_tail, snake_coordinates, tail_list, current_direction, apple, score
     death = False
     #print("anfang schleife")
 
@@ -63,6 +77,17 @@ def main_loop():
     up_down = "Up" in directions and "Down" in directions
     if not left_right and not up_down:
         current_direction = current_key #Richtung auf den aktuellen Key-Press ändern
+
+    #Apple Management
+    if snake_coordinates == apple:
+        spawn_new_tail = True
+        while True:
+            apple = [random.randint(0, button_amount_per_row-1), random.randint(0, button_amount_per_row-1)]
+            if not apple in tail_list:
+                break
+        change_color(apple, apple_color)
+        score += 1
+
 
 
     if not spawn_new_tail:
@@ -96,9 +121,16 @@ def main_loop():
         print("DEATH")
 
     
-    spawn_new_tail = False 
+    spawn_new_tail = False
+
     if not death:
-        root.after(220, main_loop)
-    root.mainloop()
+        root.after(200, main_loop)
+    else:
+        final_button = tk.Button(root, text="GAME OVER - SCORE: "+str(score), bg="#c79")
+        final_button.place(relx=0.5,rely=0.4, width=200, height=100, anchor = "center")
+        quit_button = tk.Button(root, text="QUIT", bg="#f55", command = root.destroy)
+        quit_button.place(relx=0.5,rely=0.6, width=200, height=100, anchor = "center")
+        #root.after(10000, root.destroy)
 
 main_loop()
+root.mainloop()
