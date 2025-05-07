@@ -1,5 +1,4 @@
 import tkinter as tk
-import time
 import random
 
 def key_handler(key):
@@ -33,8 +32,6 @@ current_key = "Right"
 score = 0
 
 
-
-
 root.geometry(str(screen_size) + "x" + str(screen_size)+"+50+50")
 root.config(bg=background_color)
 
@@ -57,6 +54,7 @@ current_direction = "Right"
 spawn_new_tail = True
 tail_list = []
 
+#Ersten Apfel
 while True:
     apple = [random.randint(0, button_amount_per_row-1), random.randint(0, button_amount_per_row-1)]
     if not apple in tail_list:
@@ -87,21 +85,19 @@ def main_loop():
         score += 1
 
 
-
+    #Tail aktualisieren
     if not spawn_new_tail:
         change_color(tail_list[0], button_color)
         tail_list.pop(0) 
     tail_list.append(snake_coordinates.copy())
-        
-    if current_direction == "Right":
-        snake_coordinates[0] += 1
     
+    #Kopf aktualisieren
+    if current_direction == "Right":
+        snake_coordinates[0] += 1 
     elif current_direction == "Left":
         snake_coordinates[0] -= 1
-
     elif current_direction == "Up":
         snake_coordinates[1] -= 1
-    
     elif current_direction == "Down":
         snake_coordinates[1] += 1
 
@@ -115,8 +111,6 @@ def main_loop():
         change_color(snake_coordinates, snake_head_color)
         for tail in tail_list:
             change_color(tail, snake_tail_color)
-    else:
-        print("DEATH")
 
     
     spawn_new_tail = False
@@ -128,7 +122,6 @@ def main_loop():
         final_button.place(relx=0.5,rely=0.4, width=200, height=100, anchor = "center")
         quit_button = tk.Button(root, text="QUIT", bg="#f55", command = root.destroy)
         quit_button.place(relx=0.5,rely=0.6, width=200, height=100, anchor = "center")
-        #root.after(10000, root.destroy)
 
 main_loop()
 root.mainloop()
