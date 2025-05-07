@@ -6,10 +6,9 @@ def key_handler(key):
     global current_key
     current_key = key.keysym
 
+def change_color(coordinates, color):
+    buttons[coordinates[0]][coordinates[1]].config(bg=color)
 
-root = tk.Tk()
-root.title("SNAKE")
-root.bind("<KeyPress>", key_handler)
 
 #Configurable Things
 button_amount_per_row = 15
@@ -23,13 +22,15 @@ snake_tail_color = "#000"
 apple_color = "#afa"
 
 
-#Not Configurable Things
+#Setup
+
+root = tk.Tk()
+root.title("SNAKE")
+root.bind("<KeyPress>", key_handler)
+
 screen_size = button_amount_per_row*(button_pixel_size+button_gap_size) + 2 * button_start_at - button_gap_size
 current_key = "Right"
 score = 0
-
-def change_color(coordinates, color):
-    buttons[coordinates[0]][coordinates[1]].config(bg=color)
 
 
 
@@ -48,10 +49,6 @@ for line in range(button_amount_per_row):
         button.place(x=x, y=y, width = button_pixel_size, height = button_pixel_size)
         buttons[row][line] = button
 
-time.sleep(1.5)
-
-#print("hi 1.5")
-
 #Snake initialisieren
 snake_spawn_point = int(round(button_amount_per_row/2-0.5))
 snake_coordinates = [snake_spawn_point, snake_spawn_point]
@@ -69,21 +66,22 @@ change_color(apple, apple_color)
 def main_loop():
     global spawn_new_tail, snake_coordinates, tail_list, current_direction, apple, score
     death = False
-    #print("anfang schleife")
 
     #überprüfen dass er nicht 180° Drehung macht (oben nach unten, links nach rechts, etc.)
-    directions = [current_direction, current_key]
-    left_right = "Left" in directions and "Right" in directions
-    up_down = "Up" in directions and "Down" in directions
-    if not left_right and not up_down:
-        current_direction = current_key #Richtung auf den aktuellen Key-Press ändern
+    if current_key in ["Left", "Right", "Up", "Down"]:
+        directions = [current_direction, current_key]
+        left_right = "Left" in directions and "Right" in directions
+        up_down = "Up" in directions and "Down" in directions
+        if not left_right and not up_down:
+            current_direction = current_key #Richtung auf den aktuellen Key-Press ändern
+    
 
     #Apple Management
     if snake_coordinates == apple:
         spawn_new_tail = True
         while True:
             apple = [random.randint(0, button_amount_per_row-1), random.randint(0, button_amount_per_row-1)]
-            if not apple in tail_list:
+            if not apple in tail_list and not apple == snake_coordinates:
                 break
         change_color(apple, apple_color)
         score += 1
@@ -110,7 +108,7 @@ def main_loop():
     snake_coordinates[0] = snake_coordinates[0] % button_amount_per_row 
     snake_coordinates[1] = snake_coordinates[1] % button_amount_per_row 
 
-    if snake_coordinates in tail_list:
+    if snake_coordinates in tail_list or current_key == "Escape":
         death = True
 
     if not death: 
