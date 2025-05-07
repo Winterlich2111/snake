@@ -21,8 +21,8 @@ if color_palette == 1: #bunte Farben
     snake_head_color = "#F9F9F9"
     snake_tail_color = "#FFE45E"
     apple_color = "#FF6392"
-    final_screen_score_button_color = "#FFE45E"
-    final_screen_quit_button_color = "#FFE45E"
+    final_screen_score_button_color = "#FF6392"
+    final_screen_quit_button_color = "#FF6392"
 elif color_palette == 2: #dunkel, grün
     button_color = "#002A22"
     background_color = "#03012C"
@@ -31,6 +31,14 @@ elif color_palette == 2: #dunkel, grün
     apple_color = "#190E4F"
     final_screen_score_button_color = "#190E4F"
     final_screen_quit_button_color = "#190E4F"
+elif color_palette == 3: #hellblau/orange
+    button_color = "#B5E2FA"
+    background_color = "#F9F7F3"
+    snake_head_color = "#F7A072"
+    snake_tail_color = "#EDDEA4"
+    apple_color = "#0FA3B1"
+    final_screen_score_button_color = "#F9F7F3"
+    final_screen_quit_button_color = "#F9F7F3"
 
 
 #Setup
