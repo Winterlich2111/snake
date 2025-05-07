@@ -14,11 +14,23 @@ button_amount_per_row = 15
 button_pixel_size = 40
 button_gap_size = 5
 button_start_at = 10
-button_color = "#cce"
-background_color = "lightblue"
-snake_head_color = "#f00"
-snake_tail_color = "#000"
-apple_color = "#afa"
+color_palette = 1
+if color_palette == 1: #bunte Farben
+    button_color = "#7FC8F8"
+    background_color = "#5AA9E6"
+    snake_head_color = "#F9F9F9"
+    snake_tail_color = "#FFE45E"
+    apple_color = "#FF6392"
+    final_screen_score_button_color = "#FFE45E"
+    final_screen_quit_button_color = "#FFE45E"
+elif color_palette == 2: #dunkel, grün
+    button_color = "#002A22"
+    background_color = "#03012C"
+    snake_head_color = "#B33C86"
+    snake_tail_color = "#EA638C"
+    apple_color = "#190E4F"
+    final_screen_score_button_color = "#190E4F"
+    final_screen_quit_button_color = "#190E4F"
 
 
 #Setup
@@ -118,9 +130,9 @@ def main_loop():
     if not death:
         root.after(200, main_loop)
     else:
-        final_button = tk.Button(root, text="GAME OVER - SCORE: "+str(score), bg="#c79")
+        final_button = tk.Button(root, text="GAME OVER - SCORE: "+str(score), bg=final_screen_score_button_color)
         final_button.place(relx=0.5,rely=0.4, width=200, height=100, anchor = "center")
-        quit_button = tk.Button(root, text="QUIT", bg="#f55", command = root.destroy)
+        quit_button = tk.Button(root, text="QUIT", bg=final_screen_quit_button_color, command = root.destroy)
         quit_button.place(relx=0.5,rely=0.6, width=200, height=100, anchor = "center")
 
 main_loop()
